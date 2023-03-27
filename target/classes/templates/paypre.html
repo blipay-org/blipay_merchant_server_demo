@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>发起支付</title>
+    <script type="text/javascript" th:src="@{/js/jquery-3.6.0.min.js}"></script>
+</head>
+<style>
+    body {
+        text-align: center
+    }
+
+    table {
+        margin: auto
+    }
+</style>
+<script>
+    $(function (){
+        $("#createAddress").click(function (){
+            var number = $("#number").val();
+            var type = $("#type").val();
+            $.post("../order/createAddress",{"number":number,"type":type},function(data){
+                if (data.rst == 200){
+                    alert("创建地址成功");
+                }else{
+                    alert(data.message);
+                }
+            },"json");
+        });
+        $("#transfer").click(function (){
+            var address = $("#address").val();
+            var transferType = $("#transferType").val();
+            var amount = $("#amount").val();
+            $.post("../order/transfer",{"amount":amount,"type":transferType,"address":address},function(data){
+                if (data.rst == 200){
+                    alert("成功");
+                }else{
+                    alert(data.message);
+                }
+            },"json");
+        });
+        $("#collect").click(function (){
+            $.post("../order/collect",{},function(data){
+                if (data.rst == 200){
+                    alert("归集成功");
+                }else{
+                    alert(data.message);
+                }
+            },"json");
+        });
+    });
+</script>
+<body>
+    <table>
+        <tr>
+            <td colspan="2">
+                创建地址
+            </td>
+        </tr>
+        <tr>
+            <td>
+                请输入创建地址数量
+            </td>
+            <td>
+                <input type="text" name="number" id="number">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                请选择类型:
+            </td>
+            <td>
+                <select name="type" id="type">
+                    <option value="TRON">TRON-USDT</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <input type="button" value="确定" id="createAddress">
+            </td>
+        </tr>
+    </table>
+<br/>
+<br/>
+<form th:action="@{/order/pay}" method="post">
+    <table>
+        <tr>
+            <td colspan="2">
+                支付
+            </td>
+        </tr>
+        <tr>
+            <td>
+                请输入金额:
+            </td>
+            <td>
+                <input type="text" name="amount">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                请选择类型:
+            </td>
+            <td>
+                <select name="type">
+                    <option value="1">TRON-USDT</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <input type="submit" value="确定">
+            </td>
+        </tr>
+    </table>
+</form>
+<br/>
+<br/>
+    <table>
+        <tr>
+            <td colspan="2">
+                转账
+            </td>
+        </tr>
+        <tr>
+            <td>
+                请输入转账地址
+            </td>
+            <td>
+                <input type="text" name="address" id="address">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                请输入转账金额
+            </td>
+            <td>
+                <input type="text" name="amount" id="amount">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                请选择类型:
+            </td>
+            <td>
+                <select name="type" id="transferType">
+                    <option value="TRON">TRON-USDT</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <input type="button" value="确定" id="transfer">
+            </td>
+        </tr>
+    </table>
+
+<br/>
+<br/>
+    <table>
+        <tr>
+            <td colspan="2">
+                一键归集地址余额
+            </td>
+        </tr>
+        <tr>
+            <td>
+                请选择类型:
+            </td>
+            <td>
+                <select name="type">
+                    <option value="1">TRON-USDT</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <input type="submit" value="确定" id="collect">
+            </td>
+        </tr>
+    </table>
+
+</body>
+</html>
