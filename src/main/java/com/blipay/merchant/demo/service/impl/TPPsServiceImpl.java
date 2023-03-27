@@ -18,6 +18,9 @@ public class TPPsServiceImpl implements TPPsService {
     @Value("${callback.payUrl}")
     private String payCallbackUrl;
 
+    @Value("${callback.payTimeoutUrl}")
+    private String payTimeoutCallbackUrl;
+
     @Value("${callback.withdrawUrl}")
     private String withdrawCallbackUrl;
 
@@ -38,6 +41,7 @@ public class TPPsServiceImpl implements TPPsService {
             params.put("amount", amount);
             params.put("outTradeOrder", outOrderId);
             params.put("notifyUrl", payCallbackUrl);
+            params.put("timeoutNotifyUrl",payTimeoutCallbackUrl);
 
             JSONObject paramsJson = new JSONObject(params);
 

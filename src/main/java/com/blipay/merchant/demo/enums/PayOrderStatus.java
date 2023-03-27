@@ -1,7 +1,12 @@
 package com.blipay.merchant.demo.enums;
 
 public enum PayOrderStatus {
-    SUCCESS(0, "SUCCESS"), FAIL(1, "FAIL"), CANCELED(2, "CANCELED"), WAITING_TRANSFER(3, "WAITING_TRANSFER"), WAITING_BLOCK_CONFIRMS(4, "WAITING_BLOCK_CONFIRMS"),
+    SUCCESS(0, "SUCCESS"),
+    FAIL(1, "FAIL"),
+    CANCELED(2, "CANCELED"),
+    WAITING_TRANSFER(3, "WAITING_TRANSFER"),
+    WAITING_BLOCK_CONFIRMS(4, "WAITING_BLOCK_CONFIRMS"),
+    TIMEOUT(5, "TIMEOUT"),
     ;
 
     private Integer code;

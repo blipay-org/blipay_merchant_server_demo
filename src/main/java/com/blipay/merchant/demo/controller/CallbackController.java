@@ -97,6 +97,36 @@ public class CallbackController {
         return "success";
     }
 
+
+    @ResponseBody
+    @RequestMapping(method = RequestMethod.POST, value = "payTimeoutCallback")
+    public String payTimeoutCallback(HttpServletRequest request) {
+        try {
+            String body = IOUtils.toString(request.getInputStream(), "UTF-8");
+
+            log.info("pay timeout callback:" + body);
+
+            JSONObject orderData = JSONObject.parseObject(body);
+            String outTradeOrder = orderData.getString("outTradeOrder");
+            String merchantId = orderData.getString("merchantId");
+
+            if (!merchantId.equals(merchantAppKey)) {
+                log.error("not my merchant");
+                return "fail";
+            }
+
+            TPayOrder order = payOrderService.getById(outTradeOrder);
+
+            if (order != null) {
+                order.setStatus(PayOrderStatus.TIMEOUT.getCode());
+                payOrderService.updateById(order);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return "success";
+    }
+
     @ResponseBody
     @RequestMapping(method = RequestMethod.POST, value = "withdrawCallback")
     public String withdrawCallback(HttpServletRequest request) {
