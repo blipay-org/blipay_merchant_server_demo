@@ -56,6 +56,9 @@ public class TPayOrder implements Serializable {
     @TableField("receiver_address")
     private String receiverAddress;
 
+    @TableField("send_address")
+    private String sendAddress;
+
     @TableField("expired_time")
     private Long expiredTime;
 
@@ -65,8 +68,11 @@ public class TPayOrder implements Serializable {
     @TableField("tx_block_number")
     private String txBlockNumber;
 
-    @TableField("tpps_order_id")
-    private String tppsOrderId;
+    @TableField("confirmed_block_count")
+    private String confirmedBlockCount;
+
+    @TableField("blipay_order_id")
+    private String blipayOrderId;
 
 
 }

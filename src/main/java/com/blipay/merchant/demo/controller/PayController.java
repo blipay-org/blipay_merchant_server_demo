@@ -2,12 +2,12 @@ package com.blipay.merchant.demo.controller;
 
 import cn.hutool.core.util.IdUtil;
 import com.alibaba.fastjson.JSONObject;
-import com.blipay.merchant.demo.constant.TPPsConstant;
+import com.blipay.merchant.demo.constant.BlipayAPIConstant;
 import com.blipay.merchant.demo.dto.APIResultObject;
 import com.blipay.merchant.demo.entity.TPayOrder;
 import com.blipay.merchant.demo.enums.PayOrderStatus;
 import com.blipay.merchant.demo.service.ITPayOrderService;
-import com.blipay.merchant.demo.service.TPPsService;
+import com.blipay.merchant.demo.service.BlipayAPIService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,7 +22,7 @@ import java.util.Map;
 public class PayController {
 
     @Autowired
-    private TPPsService tppsService;
+    private BlipayAPIService tppsService;
 
     @Autowired
     private ITPayOrderService payOrderService;
@@ -36,7 +36,7 @@ public class PayController {
             String newOrderId = IdUtil.simpleUUID();
             String amount = params.get("amount").toString();
 
-            String json = tppsService.pay(TPPsConstant.ChainTypeTron, TPPsConstant.CoinNameUSDT, amount, newOrderId);
+            String json = tppsService.pay(BlipayAPIConstant.ChainTypeTron, BlipayAPIConstant.CoinNameUSDT, amount, newOrderId);
             if (json != null) {
 
                 JSONObject tppsResult = JSONObject.parseObject(json);
@@ -51,10 +51,10 @@ public class PayController {
                     payOrder.setUpdateTime(new Date());
                     payOrder.setStatus(PayOrderStatus.WAITING_TRANSFER.getCode());
 
-                    payOrder.setChainType(TPPsConstant.ChainTypeTron);
-                    payOrder.setCoinName(TPPsConstant.CoinNameUSDT);
+                    payOrder.setChainType(BlipayAPIConstant.ChainTypeTron);
+                    payOrder.setCoinName(BlipayAPIConstant.CoinNameUSDT);
                     payOrder.setAmount(tppsPayOrder.getBigDecimal("amount"));
-                    payOrder.setTppsOrderId(tppsPayOrder.getString("tradeOrder"));
+                    payOrder.setBlipayOrderId(tppsPayOrder.getString("tradeOrder"));
                     payOrder.setExpiredTime(tppsPayOrder.getLong("expireTime"));
 
                     payOrder.setReceiverAddress(tppsPayOrder.getString("address"));

@@ -3,6 +3,7 @@ package com.blipay.merchant.demo.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.blipay.merchant.demo.entity.TPayOrder;
 import com.blipay.merchant.demo.entity.TWithdrawOrder;
+import com.blipay.merchant.demo.enums.BlipayOrderStatusEnum;
 import com.blipay.merchant.demo.enums.PayOrderStatus;
 import com.blipay.merchant.demo.enums.WithdrawOrderStatus;
 import com.blipay.merchant.demo.service.ITPayOrderService;
@@ -39,59 +40,65 @@ public class CallbackController {
     public String payCallback(HttpServletRequest request) {
         try {
             String body = IOUtils.toString(request.getInputStream(), "UTF-8");
-
             log.info("pay callback:" + body);
-
             JSONObject orderData = JSONObject.parseObject(body);
             BigDecimal amount = orderData.getBigDecimal("amount");
             String outTradeOrder = orderData.getString("outTradeOrder");
             String blockNumber = orderData.getString("blockNumber");
-            String fromAddress = orderData.getString("fromAddress");
-            String toAddress = orderData.getString("toAddress");
+            String sendAddress = orderData.getString("sendAddress");
+            String receiverAddress = orderData.getString("receiverAddress");
             String type = orderData.getString("type");
             String contractAddress = orderData.getString("contractAddress");
-            String transactionId = orderData.getString("transactionId");
+            String txHash = orderData.getString("hash");
             String status = orderData.getString("status");
-
-            String merchantId = orderData.getString("merchantId");
-
-            if (!merchantId.equals(merchantAppKey)) {
-                log.error("not my merchant");
-                return "fail";
-            }
+            String confirmedBlockCount = orderData.getString("confirmedBlockCount");
 
             TPayOrder order = payOrderService.getById(outTradeOrder);
-
-            if (order != null) {
-                if (order.getAmount().compareTo(amount) == 0) {
-                    switch (Integer.parseInt(status)) {
-                        case 0:
-                            order.setStatus(PayOrderStatus.WAITING_TRANSFER.getCode());
-                            break;
-                        case 1:
-                            order.setStatus(PayOrderStatus.WAITING_BLOCK_CONFIRMS.getCode());
-                            break;
-                        case 2:
-                            order.setStatus(PayOrderStatus.SUCCESS.getCode());
-                            break;
-                        case 3:
-                            order.setStatus(PayOrderStatus.CANCELED.getCode());
-                            break;
-                        case 4:
-                            order.setStatus(PayOrderStatus.FAIL.getCode());
-                            break;
-                    }
-
-                    order.setTxHash(transactionId);
-                    order.setTxBlockNumber(blockNumber);
-                    order.setUpdateTime(new Date());
-                    payOrderService.updateById(order);
-                } else {
-                    //TODO error amount
+            if (order == null) {
+                return "continue";
+            }
+            Integer statucCode = Integer.parseInt(status);
+            if (statucCode == BlipayOrderStatusEnum.TIMEOUT.getCode()) {
+                order.setStatus(PayOrderStatus.TIMEOUT.getCode());
+                order.setUpdateTime(new Date());
+                payOrderService.updateById(order);
+            } else {
+                //校验订单金额 和 收款地址
+                if (order.getAmount().compareTo(amount) != 0) {
                     log.error("order amount not equals real receive amount");
                 }
+
+                if (!receiverAddress.equals(order.getReceiverAddress())) {
+                    log.error("order receive address equals real receive address");
+                }
+
+                switch (statucCode) {
+                    case 0:
+                        order.setStatus(PayOrderStatus.WAITING_TRANSFER.getCode());
+                        break;
+                    case 1:
+                        order.setStatus(PayOrderStatus.WAITING_BLOCK_CONFIRMS.getCode());
+                        break;
+                    case 2:
+                        order.setStatus(PayOrderStatus.SUCCESS.getCode());
+                        break;
+                    case 3:
+                        order.setStatus(PayOrderStatus.CANCELED.getCode());
+                        break;
+                    case 4:
+                        order.setStatus(PayOrderStatus.FAIL.getCode());
+                        break;
+                }
+                order.setSendAddress(sendAddress);
+                order.setTxHash(txHash);
+                order.setTxBlockNumber(blockNumber);
+                order.setUpdateTime(new Date());
+                order.setConfirmedBlockCount(confirmedBlockCount);
+                payOrderService.updateById(order);
+
             }
-        } catch (IOException e) {
+        } catch (
+                IOException e) {
             e.printStackTrace();
         }
         return "success";
@@ -132,29 +139,24 @@ public class CallbackController {
     public String withdrawCallback(HttpServletRequest request) {
         try {
             String body = IOUtils.toString(request.getInputStream(), "UTF-8");
-            log.info("withdarw callback:" + body);
+            log.info("withdraw callback:" + body);
 
             JSONObject orderData = JSONObject.parseObject(body);
             BigDecimal amount = orderData.getBigDecimal("amount");
             String outTradeOrder = orderData.getString("outTradeOrder");
             String blockNumber = orderData.getString("blockNumber");
-            String fromAddress = orderData.getString("fromAddress");
-            String toAddress = orderData.getString("toAddress");
+            String sendAddress = orderData.getString("sendAddress");
+            String receiverAddress = orderData.getString("receiverAddress");
             String type = orderData.getString("type");
             String contractAddress = orderData.getString("contractAddress");
-            String transactionId = orderData.getString("transactionId");
+            String txHash = orderData.getString("hash");
             String status = orderData.getString("status");
+            String confirmedBlockCount = orderData.getString("confirmedBlockCount");
 
-            String merchantId = orderData.getString("merchantId");
-
-            if (!merchantId.equals(merchantAppKey)) {
-                log.error("not my merchant");
-                return "fail";
-            }
 
             TWithdrawOrder order = withdrawOrderService.getById(outTradeOrder);
             if (order != null) {
-                if (order.getAmount().compareTo(amount) == 0) {
+                if (order.getAmount().compareTo(amount) == 0 && order.getReceiverAddress().equals(receiverAddress)) {
                     switch (Integer.parseInt(status)) {
                         case 0:
                             order.setStatus(WithdrawOrderStatus.WAITING_TRANSFER.getCode());
@@ -171,9 +173,11 @@ public class CallbackController {
                             break;
                     }
 
-                    order.setTxHash(transactionId);
+                    order.setSendAddress(sendAddress);
+                    order.setTxHash(txHash);
                     order.setTxBlockNumber(blockNumber);
                     order.setUpdateTime(new Date());
+                    order.setConfirmedBlockCount(confirmedBlockCount);
                     withdrawOrderService.updateById(order);
                 } else {
                     //TODO error amount

@@ -11,6 +11,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 
 import java.io.Serializable;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -32,9 +33,11 @@ public class TWithdrawOrder implements Serializable {
     @TableId("id")
     private String id;
 
+    @JsonIgnore
     @TableField("create_time")
     private Date createTime;
 
+    @JsonIgnore
     @TableField("update_time")
     private Date updateTime;
 
@@ -53,20 +56,29 @@ public class TWithdrawOrder implements Serializable {
     @TableField("receiver_address")
     private String receiverAddress;
 
+    @TableField("send_address")
+    private String sendAddress;
+
+    @TableField("expired_time")
+    private Long expiredTime;
+
     @TableField("tx_hash")
     private String txHash;
 
     @TableField("tx_block_number")
     private String txBlockNumber;
 
+    @TableField("confirmed_block_count")
+    private String confirmedBlockCount;
+
+    @TableField("blipay_order_id")
+    private String blipayOrderId;
+
     @TableField("reject_reason")
     private String rejectReason;
 
     @TableField("reject_type")
     private Integer rejectType;
-
-    @TableField("tpps_order_id")
-    private String tppsOrderId;
 
 
 }

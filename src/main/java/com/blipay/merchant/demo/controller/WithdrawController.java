@@ -2,12 +2,12 @@ package com.blipay.merchant.demo.controller;
 
 import cn.hutool.core.util.IdUtil;
 import com.alibaba.fastjson.JSONObject;
-import com.blipay.merchant.demo.constant.TPPsConstant;
+import com.blipay.merchant.demo.constant.BlipayAPIConstant;
 import com.blipay.merchant.demo.dto.APIResultObject;
 import com.blipay.merchant.demo.entity.TWithdrawOrder;
 import com.blipay.merchant.demo.enums.WithdrawOrderStatus;
 import com.blipay.merchant.demo.service.ITWithdrawOrderService;
-import com.blipay.merchant.demo.service.TPPsService;
+import com.blipay.merchant.demo.service.BlipayAPIService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,7 +23,7 @@ import java.util.Map;
 public class WithdrawController {
 
     @Autowired
-    private TPPsService tppsService;
+    private BlipayAPIService tppsService;
 
     @Autowired
     private ITWithdrawOrderService withdrawOrderService;
@@ -46,10 +46,10 @@ public class WithdrawController {
             withdrawOrder.setStatus(WithdrawOrderStatus.CREATED.getCode());
             withdrawOrder.setReceiverAddress(receiverAddress);
 
-            withdrawOrder.setChainType(TPPsConstant.ChainTypeTron);
-            withdrawOrder.setCoinName(TPPsConstant.CoinNameUSDT);
+            withdrawOrder.setChainType(BlipayAPIConstant.ChainTypeTron);
+            withdrawOrder.setCoinName(BlipayAPIConstant.CoinNameUSDT);
 
-            withdrawOrder.setTppsOrderId("");
+            withdrawOrder.setBlipayOrderId("");
             withdrawOrder.setTxBlockNumber("");
             withdrawOrder.setTxHash("");
 
@@ -78,13 +78,13 @@ public class WithdrawController {
 
             TWithdrawOrder order = withdrawOrderService.getById(orderId);
 
-            String json = tppsService.withdraw(TPPsConstant.ChainTypeTron, TPPsConstant.CoinNameUSDT, order.getId(), order.getAmount().toString(), order.getReceiverAddress());
+            String json = tppsService.withdraw(BlipayAPIConstant.ChainTypeTron, BlipayAPIConstant.CoinNameUSDT, order.getId(), order.getAmount().toString(), order.getReceiverAddress());
 
             if (json != null) {
-                JSONObject tppsPayOrder = JSONObject.parseObject(json);
+                JSONObject blipayPayOrder = JSONObject.parseObject(json);
 
 
-                order.setTppsOrderId(tppsPayOrder.getString("tradeOrder"));
+                order.setBlipayOrderId(blipayPayOrder.getString("tradeOrder"));
 
                 order.setStatus(WithdrawOrderStatus.WAITING_TRANSFER.getCode());
 
