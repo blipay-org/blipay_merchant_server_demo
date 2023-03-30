@@ -39,12 +39,12 @@ public class PayController {
             String json = blipayAPIService.pay(BlipayAPIConstant.ChainTypeTron, BlipayAPIConstant.CoinNameUSDT, amount, newOrderId);
             if (json != null) {
 
-                JSONObject tppsResult = JSONObject.parseObject(json);
+                JSONObject blipayApiResult = JSONObject.parseObject(json);
 
-                int code = tppsResult.getIntValue("rst");
-                String message = tppsResult.getString("msg");
+                int code = blipayApiResult.getIntValue("rst");
+                String message = blipayApiResult.getString("msg");
                 if (code == 200) {
-                    JSONObject tppsPayOrder = tppsResult.getJSONObject("data");
+                    JSONObject blipayPayOrder = blipayApiResult.getJSONObject("data");
                     TPayOrder payOrder = new TPayOrder();
                     payOrder.setId(newOrderId);
                     payOrder.setCreateTime(new Date());
@@ -53,11 +53,11 @@ public class PayController {
 
                     payOrder.setChainType(BlipayAPIConstant.ChainTypeTron);
                     payOrder.setCoinName(BlipayAPIConstant.CoinNameUSDT);
-                    payOrder.setAmount(tppsPayOrder.getBigDecimal("amount"));
-                    payOrder.setBlipayOrderId(tppsPayOrder.getString("tradeOrder"));
-                    payOrder.setExpiredTime(tppsPayOrder.getLong("expireTime"));
+                    payOrder.setAmount(blipayPayOrder.getBigDecimal("amount"));
+                    payOrder.setBlipayOrderId(blipayPayOrder.getString("tradeOrder"));
+                    payOrder.setExpiredTime(blipayPayOrder.getLong("expireTime"));
 
-                    payOrder.setReceiverAddress(tppsPayOrder.getString("address"));
+                    payOrder.setReceiverAddress(blipayPayOrder.getString("address"));
                     payOrder.setTxBlockNumber("");
                     payOrder.setTxHash("");
 
@@ -75,7 +75,7 @@ public class PayController {
             } else {
                 result.code = 1002;
                 result.data = null;
-                result.message = "tpps error";
+                result.message = "blipay service error";
             }
         } catch (Exception e) {
             result.data = null;

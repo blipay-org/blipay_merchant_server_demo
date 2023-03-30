@@ -96,7 +96,7 @@ public class WithdrawController {
             } else {
                 result.code = 1002;
                 result.data = null;
-                result.message = "tpps error";
+                result.message = "blipay service error";
             }
         } catch (Exception e) {
             result.data = null;
