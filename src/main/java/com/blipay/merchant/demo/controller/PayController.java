@@ -22,7 +22,7 @@ import java.util.Map;
 public class PayController {
 
     @Autowired
-    private BlipayAPIService tppsService;
+    private BlipayAPIService blipayAPIService;
 
     @Autowired
     private ITPayOrderService payOrderService;
@@ -36,7 +36,7 @@ public class PayController {
             String newOrderId = IdUtil.simpleUUID();
             String amount = params.get("amount").toString();
 
-            String json = tppsService.pay(BlipayAPIConstant.ChainTypeTron, BlipayAPIConstant.CoinNameUSDT, amount, newOrderId);
+            String json = blipayAPIService.pay(BlipayAPIConstant.ChainTypeTron, BlipayAPIConstant.CoinNameUSDT, amount, newOrderId);
             if (json != null) {
 
                 JSONObject tppsResult = JSONObject.parseObject(json);

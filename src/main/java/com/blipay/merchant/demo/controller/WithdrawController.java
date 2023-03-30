@@ -23,7 +23,7 @@ import java.util.Map;
 public class WithdrawController {
 
     @Autowired
-    private BlipayAPIService tppsService;
+    private BlipayAPIService blipayAPIService;
 
     @Autowired
     private ITWithdrawOrderService withdrawOrderService;
@@ -78,7 +78,7 @@ public class WithdrawController {
 
             TWithdrawOrder order = withdrawOrderService.getById(orderId);
 
-            String json = tppsService.withdraw(BlipayAPIConstant.ChainTypeTron, BlipayAPIConstant.CoinNameUSDT, order.getId(), order.getAmount().toString(), order.getReceiverAddress());
+            String json = blipayAPIService.withdraw(BlipayAPIConstant.ChainTypeTron, BlipayAPIConstant.CoinNameUSDT, order.getId(), order.getAmount().toString(), order.getReceiverAddress());
 
             if (json != null) {
                 JSONObject blipayPayOrder = JSONObject.parseObject(json);
