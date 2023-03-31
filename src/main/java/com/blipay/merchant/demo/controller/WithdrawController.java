@@ -46,8 +46,7 @@ public class WithdrawController {
             withdrawOrder.setStatus(WithdrawOrderStatus.CREATED.getCode());
             withdrawOrder.setReceiverAddress(receiverAddress);
 
-            withdrawOrder.setChainType(BlipayAPIConstant.ChainTypeTron);
-            withdrawOrder.setCoinName(BlipayAPIConstant.CoinNameUSDT);
+            withdrawOrder.setToken(BlipayAPIConstant.Token_USDTTRC20);
 
             withdrawOrder.setBlipayOrderId("");
             withdrawOrder.setTxBlockNumber("");
@@ -78,7 +77,7 @@ public class WithdrawController {
 
             TWithdrawOrder order = withdrawOrderService.getById(orderId);
 
-            String json = blipayAPIService.withdraw(BlipayAPIConstant.ChainTypeTron, BlipayAPIConstant.CoinNameUSDT, order.getId(), order.getAmount().toString(), order.getReceiverAddress());
+            String json = blipayAPIService.withdraw(BlipayAPIConstant.Token_USDTTRC20, order.getId(), order.getAmount().toString(), order.getReceiverAddress());
 
             if (json != null) {
                 JSONObject blipayPayOrder = JSONObject.parseObject(json);

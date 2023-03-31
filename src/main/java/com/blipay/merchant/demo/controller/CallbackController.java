@@ -43,6 +43,7 @@ public class CallbackController {
             log.info("pay callback:" + body);
             JSONObject orderData = JSONObject.parseObject(body);
             BigDecimal amount = orderData.getBigDecimal("amount");
+            String blipayOrderId = orderData.getString("blipayOrderId");
             String outTradeOrder = orderData.getString("outTradeOrder");
             String blockNumber = orderData.getString("blockNumber");
             String sendAddress = orderData.getString("sendAddress");
@@ -51,7 +52,8 @@ public class CallbackController {
             String contractAddress = orderData.getString("contractAddress");
             String txHash = orderData.getString("hash");
             String status = orderData.getString("status");
-            String confirmedBlockCount = orderData.getString("confirmedBlockCount");
+            String realConfirmedBlockCount = orderData.getString("realConfirmedBlockCount");
+            String careConfirmedBlockCount = orderData.getString("careConfirmedBlockCount");
 
             TPayOrder order = payOrderService.getById(outTradeOrder);
             if (order == null) {
@@ -93,7 +95,7 @@ public class CallbackController {
                 order.setTxHash(txHash);
                 order.setTxBlockNumber(blockNumber);
                 order.setUpdateTime(new Date());
-                order.setConfirmedBlockCount(confirmedBlockCount);
+                order.setConfirmedBlockCount(realConfirmedBlockCount);
                 payOrderService.updateById(order);
 
             }
@@ -143,6 +145,7 @@ public class CallbackController {
 
             JSONObject orderData = JSONObject.parseObject(body);
             BigDecimal amount = orderData.getBigDecimal("amount");
+            String blipayOrderId = orderData.getString("blipayOrderId");
             String outTradeOrder = orderData.getString("outTradeOrder");
             String blockNumber = orderData.getString("blockNumber");
             String sendAddress = orderData.getString("sendAddress");
@@ -151,8 +154,8 @@ public class CallbackController {
             String contractAddress = orderData.getString("contractAddress");
             String txHash = orderData.getString("hash");
             String status = orderData.getString("status");
-            String confirmedBlockCount = orderData.getString("confirmedBlockCount");
-
+            String realConfirmedBlockCount = orderData.getString("realConfirmedBlockCount");
+            String careConfirmedBlockCount = orderData.getString("careConfirmedBlockCount");
 
             TWithdrawOrder order = withdrawOrderService.getById(outTradeOrder);
             if (order != null) {
@@ -177,7 +180,7 @@ public class CallbackController {
                     order.setTxHash(txHash);
                     order.setTxBlockNumber(blockNumber);
                     order.setUpdateTime(new Date());
-                    order.setConfirmedBlockCount(confirmedBlockCount);
+                    order.setConfirmedBlockCount(realConfirmedBlockCount);
                     withdrawOrderService.updateById(order);
                 } else {
                     //TODO error amount

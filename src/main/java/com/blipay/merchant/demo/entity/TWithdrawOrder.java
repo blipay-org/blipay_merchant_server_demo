@@ -51,7 +51,7 @@ public class TWithdrawOrder implements Serializable {
     private String chainType;
 
     @TableField("coin_name")
-    private String coinName;
+    private String token;
 
     @TableField("receiver_address")
     private String receiverAddress;

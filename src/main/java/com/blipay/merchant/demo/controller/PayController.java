@@ -36,7 +36,7 @@ public class PayController {
             String newOrderId = IdUtil.simpleUUID();
             String amount = params.get("amount").toString();
 
-            String json = blipayAPIService.pay(BlipayAPIConstant.ChainTypeTron, BlipayAPIConstant.CoinNameUSDT, amount, newOrderId);
+            String json = blipayAPIService.pay(BlipayAPIConstant.Token_USDTTRC20, amount, newOrderId);
             if (json != null) {
 
                 JSONObject blipayApiResult = JSONObject.parseObject(json);
@@ -51,8 +51,7 @@ public class PayController {
                     payOrder.setUpdateTime(new Date());
                     payOrder.setStatus(PayOrderStatus.WAITING_TRANSFER.getCode());
 
-                    payOrder.setChainType(BlipayAPIConstant.ChainTypeTron);
-                    payOrder.setCoinName(BlipayAPIConstant.CoinNameUSDT);
+                    payOrder.setToken(BlipayAPIConstant.Token_USDTTRC20);
                     payOrder.setAmount(blipayPayOrder.getBigDecimal("amount"));
                     payOrder.setBlipayOrderId(blipayPayOrder.getString("tradeOrder"));
                     payOrder.setExpiredTime(blipayPayOrder.getLong("expireTime"));

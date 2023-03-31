@@ -1,0 +1,14 @@
+2023-03-30 22:04:37.627 INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 6.2.3.Final
+2023-03-30 22:04:37.628 INFO  c.b.merchant.demo.DemoApplication - Starting DemoApplication using Java 11.0.17 on vvvvkendeMacBook-Pro.local with PID 65460 (/Users/vken/ProjectSources/blipay-org/blipay_merchant_server_demo/target/classes started by vken in /Users/vken/ProjectSources/blipay-org/blipay_merchant_server_demo)
+2023-03-30 22:04:37.636 INFO  c.b.merchant.demo.DemoApplication - No active profile set, falling back to 1 default profile: "default"
+2023-03-30 22:04:39.702 INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 8892 (http)
+2023-03-30 22:04:39.747 INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8892"]
+2023-03-30 22:04:39.748 INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2023-03-30 22:04:39.753 INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.62]
+2023-03-30 22:04:40.061 INFO  o.a.c.c.C.[.[.[/blipay_merchant_server_demo] - Initializing Spring embedded WebApplicationContext
+2023-03-30 22:04:40.062 INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2374 ms
+2023-03-30 22:04:40.454 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2023-03-30 22:04:41.001 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2023-03-30 22:04:41.303 INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8892"]
+2023-03-30 22:04:41.316 INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 8892 (http) with context path '/blipay_merchant_server_demo'
+2023-03-30 22:04:41.325 INFO  c.b.merchant.demo.DemoApplication - Started DemoApplication in 4.079 seconds (JVM running for 4.787)

@@ -31,13 +31,12 @@ public class BlipayAPIServiceImpl implements BlipayAPIService {
     private String merchantSecretKey;
 
     @Override
-    public String pay(String chainType, String coinName, String amount, String outOrderId) {
+    public String pay(String token, String amount, String outOrderId) {
         try {
             Map<String, Object> params = new HashMap<String, Object>();
             params.put("merchantId", merchantAppKey);
             params.put("secretKey", merchantSecretKey);
-            params.put("chainType", chainType);
-            params.put("coinName", coinName);
+            params.put("token", token);
             params.put("amount", amount);
             params.put("outTradeOrder", outOrderId);
             params.put("notifyUrl", payCallbackUrl);
@@ -66,13 +65,12 @@ public class BlipayAPIServiceImpl implements BlipayAPIService {
     }
 
     @Override
-    public String withdraw(String chainType, String coinName, String outOrderId, String amount, String receiverAddress) {
+    public String withdraw(String token, String outOrderId, String amount, String receiverAddress) {
         try {
             Map<String, Object> params = new HashMap<String, Object>();
             params.put("merchantId", merchantAppKey);
             params.put("secretKey", merchantSecretKey);
-            params.put("chainType", chainType);
-            params.put("coinName", coinName);
+            params.put("token", token);
             params.put("amount", amount);
             params.put("outTradeOrder", outOrderId);
             params.put("address", receiverAddress);
