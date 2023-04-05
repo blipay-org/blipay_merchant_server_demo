@@ -1,0 +1,16 @@
+2023-04-03 22:18:36.260 INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 6.2.3.Final
+2023-04-03 22:18:36.300 INFO  c.b.merchant.demo.DemoApplication - Starting DemoApplication using Java 11.0.17 on vvvvkendeMacBook-Pro.local with PID 86424 (/Users/vken/ProjectSources/blipay-org/blipay_merchant_server_demo/target/classes started by vken in /Users/vken/ProjectSources/blipay-org/blipay_merchant_server_demo)
+2023-04-03 22:18:36.313 INFO  c.b.merchant.demo.DemoApplication - No active profile set, falling back to 1 default profile: "default"
+2023-04-03 22:18:37.598 INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 8892 (http)
+2023-04-03 22:18:37.612 INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8892"]
+2023-04-03 22:18:37.613 INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2023-04-03 22:18:37.614 INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.62]
+2023-04-03 22:18:37.741 INFO  o.a.c.c.C.[.[.[/blipay_merchant_server_demo] - Initializing Spring embedded WebApplicationContext
+2023-04-03 22:18:37.741 INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1373 ms
+2023-04-03 22:18:38.195 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2023-04-03 22:18:38.674 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2023-04-03 22:18:39.075 INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8892"]
+2023-04-03 22:18:39.096 INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 8892 (http) with context path '/blipay_merchant_server_demo'
+2023-04-03 22:18:39.112 INFO  c.b.merchant.demo.DemoApplication - Started DemoApplication in 3.507 seconds (JVM running for 4.258)
+2023-04-03 23:19:17.280 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2023-04-03 23:19:17.286 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.

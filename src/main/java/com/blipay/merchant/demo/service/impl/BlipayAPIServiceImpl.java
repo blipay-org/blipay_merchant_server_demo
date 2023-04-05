@@ -5,7 +5,12 @@ import com.blipay.merchant.demo.service.BlipayAPIService;
 import com.blipay.merchant.demo.utils.SOLEasyHttp;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,8 +39,6 @@ public class BlipayAPIServiceImpl implements BlipayAPIService {
     public String pay(String token, String amount, String outOrderId) {
         try {
             Map<String, Object> params = new HashMap<String, Object>();
-            params.put("merchantId", merchantAppKey);
-            params.put("secretKey", merchantSecretKey);
             params.put("token", token);
             params.put("amount", amount);
             params.put("outTradeOrder", outOrderId);
@@ -68,8 +71,7 @@ public class BlipayAPIServiceImpl implements BlipayAPIService {
     public String withdraw(String token, String outOrderId, String amount, String receiverAddress) {
         try {
             Map<String, Object> params = new HashMap<String, Object>();
-            params.put("merchantId", merchantAppKey);
-            params.put("secretKey", merchantSecretKey);
+
             params.put("token", token);
             params.put("amount", amount);
             params.put("outTradeOrder", outOrderId);
@@ -93,6 +95,67 @@ public class BlipayAPIServiceImpl implements BlipayAPIService {
             JSONObject paramsJson = new JSONObject(params);
 
             return SOLEasyHttp.postWithJson(blipayApiServiceUrl + "order/inquiryWithdraw", paramsJson);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    @Override
+    public String queryAddressList(String token, Integer pageNo, Integer pageSize) {
+
+
+        try {
+            Map<String, Object> params = new HashMap<String, Object>();
+            params.put("token", token);
+            params.put("pageNo", pageNo);
+            params.put("pageSize", pageSize);
+
+            JSONObject paramsJson = new JSONObject(params);
+
+            return SOLEasyHttp.postWithJson(blipayApiServiceUrl + "admin/addressList", paramsJson);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    @Override
+    public String queryOrderList(String token, Integer pageNo, Integer pageSize, String outTradeOrder, String startDate, String endDate, Integer status, Integer type) {
+
+        try {
+            Map<String, Object> params = new HashMap<String, Object>();
+            params.put("token", token);
+            params.put("pageNo", pageNo);
+            params.put("pageSize", pageSize);
+            params.put("outTradeOrder", outTradeOrder);
+            params.put("startDate", startDate);
+            params.put("endDate", endDate);
+            if (status >= 0) params.put("status", status);
+            if (type >= 0) params.put("type", type);
+
+            JSONObject paramsJson = new JSONObject(params);
+
+            return SOLEasyHttp.postWithJson(blipayApiServiceUrl + "admin/orderList", paramsJson);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    @Override
+    public String summary(String token, Integer pageNo, Integer pageSize, String outTradeOrder, String startDate, String endDate, Integer status, Integer type) {
+        try {
+            Map<String, Object> params = new HashMap<String, Object>();
+            params.put("token", token);
+            params.put("pageNo", pageNo);
+            params.put("pageSize", pageSize);
+            params.put("outTradeOrder", outTradeOrder);
+            params.put("startDate", startDate);
+            params.put("endDate", endDate);
+            params.put("status", status);
+            params.put("type", type);
+
+            JSONObject paramsJson = new JSONObject(params);
+
+            return SOLEasyHttp.postWithJson(blipayApiServiceUrl + "admin/sum", paramsJson);
         } catch (Exception e) {
             return null;
         }
