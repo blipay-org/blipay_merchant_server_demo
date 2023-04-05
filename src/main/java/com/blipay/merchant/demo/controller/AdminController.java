@@ -62,9 +62,9 @@ public class AdminController {
 
     @ResponseBody
     @RequestMapping(method = RequestMethod.POST, value = "addressList")
-    public PagedAPIResultObject<JSONObject> queryAddressList(@RequestBody Map<String, Object> params) {
+    public APIResultObject<JSONObject> queryAddressList(@RequestBody Map<String, Object> params) {
 
-        PagedAPIResultObject<JSONObject> result = new PagedAPIResultObject<>();
+        APIResultObject<JSONObject> result = new APIResultObject<>();
         try {
             Integer pageNo = 1;
             Integer pageSize = 20;
@@ -86,25 +86,21 @@ public class AdminController {
                     result.code = 0;
                     result.data = blipayApiResult.getJSONObject("data");
                     result.message = "success";
-                    result.total = blipayApiResult.getInteger("total");
                 } else {
                     result.code = code;
                     result.data = null;
                     result.message = message;
-                    result.total = 0;
                 }
 
             } else {
                 result.code = 1002;
                 result.data = null;
                 result.message = "blipay service error";
-                result.total = 0;
             }
         } catch (Exception e) {
             result.data = null;
             result.code = 1001;
             result.message = e.getLocalizedMessage();
-            result.total = 0;
         }
         return result;
     }
@@ -112,9 +108,9 @@ public class AdminController {
 
     @ResponseBody
     @RequestMapping(method = RequestMethod.POST, value = "orderList")
-    public PagedAPIResultObject<JSONObject> queryOrderList(@RequestBody Map<String, Object> params) {
+    public APIResultObject<JSONObject> queryOrderList(@RequestBody Map<String, Object> params) {
 
-        PagedAPIResultObject<JSONObject> result = new PagedAPIResultObject<>();
+        APIResultObject<JSONObject> result = new APIResultObject<>();
         try {
             Integer pageNo = 1;
             Integer pageSize = 20;
@@ -161,44 +157,40 @@ public class AdminController {
                     result.code = 0;
                     result.data = blipayApiResult.getJSONObject("data");
                     result.message = "success";
-                    result.total = blipayApiResult.getInteger("total");
                 } else {
                     result.code = code;
                     result.data = null;
                     result.message = message;
-                    result.total = 0;
                 }
 
             } else {
                 result.code = 1002;
                 result.data = null;
                 result.message = "blipay service error";
-                result.total = 0;
             }
         } catch (Exception e) {
             result.data = null;
             result.code = 1001;
             result.message = e.getLocalizedMessage();
-            result.total = 0;
         }
         return result;
     }
 
     @ResponseBody
-    @RequestMapping(method = RequestMethod.POST, value = "collect")
-    public PagedAPIResultObject<JSONObject> collect(@RequestBody Map<String, Object> params) {
+    @RequestMapping(method = RequestMethod.POST, value = "summary")
+    public APIResultObject<JSONObject> summary(@RequestBody Map<String, Object> params) {
 
-        PagedAPIResultObject<JSONObject> result = new PagedAPIResultObject<>();
+        APIResultObject<JSONObject> result = new APIResultObject<>();
         try {
-            Integer pageNo = 1;
-            Integer pageSize = 20;
+            int pageNo = 1;
+            int pageSize = 20;
             String outTradeOrder = null;
             String startDate = null;
             String endDate = null;
             //"订单状态：0-初始，1-确认中，2-成功，3-关闭，4-失败")
-            Integer status = -1;
+            Integer status = null;
             // "订单类型：1-充值，2-提现，3-归集手续费，4-归集订单，5-异常订单")
-            Integer type = -1;
+            Integer type = null;
 
 
             if (params.containsKey("pageNo")) {
@@ -224,7 +216,44 @@ public class AdminController {
                 type = Integer.parseInt(params.get("type").toString());
             }
 
-            String json = blipayAPIService.queryOrderList(BlipayAPIConstant.Token_USDTTRC20, pageNo, pageSize, outTradeOrder, startDate, endDate, status, type);
+            String json = blipayAPIService.summary(BlipayAPIConstant.Token_USDTTRC20, pageNo, pageSize, outTradeOrder, startDate, endDate, status, type);
+            if (json != null) {
+
+                JSONObject blipayApiResult = JSONObject.parseObject(json);
+
+                int code = blipayApiResult.getIntValue("rst");
+                String message = blipayApiResult.getString("msg");
+                if (code == 200) {
+                    result.code = 0;
+                    result.data = blipayApiResult.getJSONObject("data");
+                    result.message = "success";
+                } else {
+                    result.code = code;
+                    result.data = null;
+                    result.message = message;
+                }
+
+            } else {
+                result.code = 1002;
+                result.data = null;
+                result.message = "blipay service error";
+            }
+        } catch (Exception e) {
+            result.data = null;
+            result.code = 1001;
+            result.message = e.getLocalizedMessage();
+        }
+        return result;
+    }
+
+    @ResponseBody
+    @RequestMapping(method = RequestMethod.POST, value = "collect")
+    public PagedAPIResultObject<JSONObject> collect(@RequestBody Map<String, Object> params) {
+
+        PagedAPIResultObject<JSONObject> result = new PagedAPIResultObject<>();
+        try {
+
+            String json = blipayAPIService.collect(BlipayAPIConstant.Token_USDTTRC20);
             if (json != null) {
 
                 JSONObject blipayApiResult = JSONObject.parseObject(json);

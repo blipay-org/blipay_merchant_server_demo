@@ -17,4 +17,5 @@ public interface BlipayAPIService {
 
     String summary(String token, Integer pageNo, Integer pageSize, String outTradeOrder, String startDate, String endDate, Integer status, Integer type);
 
+    String collect(String token);
 }

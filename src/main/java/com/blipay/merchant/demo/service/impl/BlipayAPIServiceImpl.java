@@ -143,6 +143,10 @@ public class BlipayAPIServiceImpl implements BlipayAPIService {
     @Override
     public String summary(String token, Integer pageNo, Integer pageSize, String outTradeOrder, String startDate, String endDate, Integer status, Integer type) {
         try {
+            if (status < 0)
+                status = null;
+            if (type < 0)
+                type = null;
             Map<String, Object> params = new HashMap<String, Object>();
             params.put("token", token);
             params.put("pageNo", pageNo);
@@ -150,12 +154,26 @@ public class BlipayAPIServiceImpl implements BlipayAPIService {
             params.put("outTradeOrder", outTradeOrder);
             params.put("startDate", startDate);
             params.put("endDate", endDate);
+
             params.put("status", status);
             params.put("type", type);
 
             JSONObject paramsJson = new JSONObject(params);
 
             return SOLEasyHttp.postWithJson(blipayApiServiceUrl + "admin/sum", paramsJson);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    @Override
+    public String collect(String token) {
+        try {
+            Map<String, Object> params = new HashMap<String, Object>();
+            params.put("token", token);
+            JSONObject paramsJson = new JSONObject(params);
+
+            return SOLEasyHttp.postWithJson(blipayApiServiceUrl + "admin/collect", paramsJson);
         } catch (Exception e) {
             return null;
         }
